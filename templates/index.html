@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Warehouse Knapsack Optimization</title>
+</head>
+<body>
+    <h1>Warehouse Packing Optimization</h1>
+    <form action="/add_item" method="post">
+        <label>Item Name:</label>
+        <input type="text" name="name" required>
+        <label>Weight:</label>
+        <input type="number" step="0.01" name="weight" required>
+        <label>Profit:</label>
+        <input type="number" step="0.01" name="profit" required>
+        <button type="submit">Add Item</button>
+    </form>
+    
+    <h2>Current Items</h2>
+    <ul>
+        {% for item in items %}
+            <li>{{ item.name }} - Weight: {{ item.weight }}, Profit: {{ item.profit }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Compute Knapsack</h2>
+    <form action="/compute" method="post">
+        <label>Total Warehouse Capacity:</label>
+        <input type="number" step="0.01" name="capacity" required>
+        <button type="submit">Compute Optimization</button>
+    </form>
+
+    <form action="/clear" method="post">
+        <button type="submit">Clear Items</button>
+    </form>
+</body>
+</html>

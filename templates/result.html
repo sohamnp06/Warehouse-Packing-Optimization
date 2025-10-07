@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Knapsack Result</title>
+</head>
+<body>
+    <h1>Knapsack Optimization Result</h1>
+    
+    <h2>Fractional Knapsack</h2>
+    <p>Maximum Profit: {{ frac_profit }}</p>
+    <ul>
+        {% for item in frac_items %}
+            <li>{{ item.name }} - Weight: {{ item.weight }}, Profit: {{ item.profit }}, Fraction: {{ item.fraction }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>0/1 Knapsack</h2>
+    <p>Maximum Profit: {{ int_profit }}</p>
+    <ul>
+        {% for item in int_items %}
+            <li>{{ item.name }} - Weight: {{ item.weight }}, Profit: {{ item.profit }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Recommendation</h2>
+    <p>{{ recommendation }}</p>
+
+    <a href="/">Back to Home</a>
+</body>
+</html>
