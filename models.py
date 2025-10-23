@@ -36,6 +36,7 @@ def add_item(name, weight, profit):
 
 
 def get_active_items():
+    
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     c.execute('SELECT name, weight, profit FROM active_items')

@@ -11,14 +11,26 @@ from knapsack import fractional_knapsack, knapsack_01
 app = Flask(__name__)
 init_db()
 
+ITEM_CATEGORIES = {
+    "Laptop": "01",
+    "Charger": "01",
+    "Perfume": "fractional",
+    "Oil Barrel": "fractional",
+    "Rice": "fractional"
+}
+
 @app.route('/')
 def index():
     items = get_active_items()
-    return render_template('index.html', items=items)
+    allowed_items = list(ITEM_CATEGORIES.keys())
+    return render_template('index.html', items=items, allowed_items=allowed_items)
 
 @app.route('/add_item', methods=['POST'])
 def add_item_route():
     name = request.form['name']
+    if name not in ITEM_CATEGORIES:
+        return f"<h2>Invalid item selected. Choose from the predefined list only.</h2><a href='/'>Back to Home</a>"
+
     weight = float(request.form['weight'])
     profit = float(request.form['profit'])
     add_item(name, weight, profit)
@@ -37,14 +49,16 @@ def compute():
     if not items:
         return "<h2>No active items to compute. Please add items first.</h2><a href='/'>Back to Home</a>"
 
-    frac_profit, frac_items = fractional_knapsack(items, capacity)
-    int_profit, int_items = knapsack_01(items, int(capacity))
+    has_01_item = any(ITEM_CATEGORIES[item['name']] == '01' for item in items)
 
-    # Recommendation considering capacity
-    if int_profit >= frac_profit:
-        recommendation = "0/1 Knapsack is feasible and respects capacity — use this if items cannot be divided."
+    if has_01_item:
+        int_profit, int_items = knapsack_01(items, int(capacity))
+        recommendation = "0/1 Knapsack is applied because at least one indivisible item was selected (Laptop or Charger)."
+        frac_profit, frac_items = 0, []
     else:
-        recommendation = "Fractional Knapsack gives higher theoretical profit if items can be divided, but actual capacity is respected only in 0/1 Knapsack.Better use 0/1 Knapsack"
+        frac_profit, frac_items = fractional_knapsack(items, capacity)
+        recommendation = "Fractional Knapsack is applied because all selected items can be divided (Perfume, Oil Barrel, Rice)."
+        int_profit, int_items = 0, []
 
     return render_template(
         'result.html',
