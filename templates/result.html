@@ -5,16 +5,15 @@
     <title>Knapsack Result</title>
 </head>
 <body>
-    <h1>Warehouse Knapsack Optimization Result</h1>
+    <h1>Knapsack Optimization Result</h1>
 
-    <h2>Recommendation</h2>
+    <h2>Applied Algorithm</h2>
     <p>{{ recommendation }}</p>
     <hr>
 
     {% if int_profit > 0 %}
         <h2>Used Algorithm: 0/1 Knapsack</h2>
         <p><strong>Total Maximum Profit:</strong> {{ int_profit }}</p>
-        <h3>Selected Items:</h3>
         <ul>
             {% for item in int_items %}
                 <li>{{ item.name }} — Weight: {{ item.weight }}, Profit: {{ item.profit }}</li>
@@ -23,10 +22,9 @@
     {% elif frac_profit > 0 %}
         <h2>Used Algorithm: Fractional Knapsack</h2>
         <p><strong>Total Maximum Profit:</strong> {{ frac_profit }}</p>
-        <h3>Selected Items (with fractions if partial):</h3>
         <ul>
             {% for item in frac_items %}
-                <li>{{ item.name }} — Weight: {{ item.weight }}, Profit: {{ item.profit }}, Fraction Taken: {{ item.fraction }}</li>
+                <li>{{ item.name }} — Weight: {{ item.weight }}, Profit: {{ item.profit }}, Fraction: {{ item.fraction }}</li>
             {% endfor %}
         </ul>
     {% else %}

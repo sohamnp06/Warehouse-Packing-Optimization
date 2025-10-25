@@ -27,13 +27,17 @@ def index():
 
 @app.route('/add_item', methods=['POST'])
 def add_item_route():
-    name = request.form['name']
-    if name not in ITEM_CATEGORIES:
-        return f"<h2>Invalid item selected. Choose from the predefined list only.</h2><a href='/'>Back to Home</a>"
-
+    item_category = request.form['item_category']
+    item_name = request.form['item_name']
     weight = float(request.form['weight'])
     profit = float(request.form['profit'])
-    add_item(name, weight, profit)
+
+    if item_category not in ITEM_CATEGORIES:
+        return f"<h2>Invalid item category selected.</h2><a href='/'>Back</a>"
+
+    full_name = f"{item_category} ({item_name})"
+    add_item(full_name, weight, profit)
+
     return redirect('/')
 
 @app.route('/clear', methods=['POST'])
@@ -49,15 +53,15 @@ def compute():
     if not items:
         return "<h2>No active items to compute. Please add items first.</h2><a href='/'>Back to Home</a>"
 
-    has_01_item = any(ITEM_CATEGORIES[item['name']] == '01' for item in items)
+    has_01_item = any(any(keyword in item['name'] for keyword in ["Laptop", "Charger"]) for item in items)
 
     if has_01_item:
         int_profit, int_items = knapsack_01(items, int(capacity))
-        recommendation = "0/1 Knapsack is applied because at least one indivisible item was selected (Laptop or Charger)."
+        recommendation = "0/1 Knapsack applied (contains indivisible items)."
         frac_profit, frac_items = 0, []
     else:
         frac_profit, frac_items = fractional_knapsack(items, capacity)
-        recommendation = "Fractional Knapsack is applied because all selected items can be divided (Perfume, Oil Barrel, Rice)."
+        recommendation = "Fractional Knapsack applied (contains all divisible items)."
         int_profit, int_items = 0, []
 
     return render_template(

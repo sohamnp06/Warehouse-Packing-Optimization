@@ -1,6 +1,7 @@
-
+# knapsack.py
 
 def fractional_knapsack(items, capacity):
+    
     n = len(items)
     ratio = [(item['profit'] / item['weight'], i) for i, item in enumerate(items)]
     ratio.sort(reverse=True)
@@ -20,7 +21,7 @@ def fractional_knapsack(items, capacity):
                 fractions[i] = remain / items[i]['weight']
                 total_profit += fractions[i] * items[i]['profit']
                 total_weight += remain
-            break 
+            break  
 
     result = []
     for i, item in enumerate(items):
@@ -36,6 +37,7 @@ def fractional_knapsack(items, capacity):
 
 
 def knapsack_01(items, capacity):
+
     capacity = int(capacity)
     n = len(items)
 
